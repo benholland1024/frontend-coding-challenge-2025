@@ -8,22 +8,31 @@
     <top-navbar />
 
     <!-- Gradient bar, with tabs -->
-    <div class="bg-linear-[90deg,#21272C_0%,#254954_30%,#254954_60%,#21272C_100%] h-16 flex">
+    <div class="bg-linear-[90deg,#21272C_0%,#254954_30%,#254954_60%,#21272C_100%] h-12 flex">
       <!-- The first tab (transparent bg) -->
-      <div class="w-64 h-12 mt-4 flex justify-center items-center text-white/50">
+      <div class="w-48 h-10 mt-2 flex justify-center items-center text-white/50">
         <Icon icon="material-symbols:folder-outline" class="mr-4 text-white/50 text-3xl"></Icon>
         Scenes overview
       </div>
 
       <!-- The second tab (colored bg)-->
-      <div class="w-64 bg-[#21272C] h-12 mt-4 flex justify-center items-center text-white/50
+      <div class="w-48 bg-[#21272C] h-10 mt-2 flex justify-center items-center text-white/50
         rounded-t-lg relative">
         <div class="absolute bottom-0 -left-4 rounded-br-xl bg-transparent w-4 h-4
-          shadow-[0.5rem_0_0_0] shadow-[#21272C]"></div>
-        <Icon icon="material-symbols:folder-outline" class="mr-4 text-white text-3xl"></Icon>
+          shadow-[0.5rem_0_0_0] shadow-[#21272C]">
+        </div>
+        <Icon icon="material-symbols:check" class="mr-4 text-white text-3xl"></Icon>
         My Scene
         <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
-          shadow-[-0.5rem_0_0_0] shadow-[#21272C]"></div>
+          shadow-[-0.5rem_0_0_0] shadow-[#21272C]">
+        </div>
+      </div>
+
+      <!-- The save button  -->
+      <div class="flex-1"></div>
+      <div class="w-32 h-8 m-2 bg-[#55F37F] text-white flex items-center rounded">
+        <Icon icon="mdi:content-save" class="mx-4 text-white text-3xl"></Icon>
+        Save
       </div>
     </div>
 
