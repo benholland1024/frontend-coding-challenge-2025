@@ -1799,12 +1799,14 @@ __metadata:
     "@types/node": "npm:^22.16.5"
     "@vitejs/plugin-vue": "npm:^6.0.1"
     "@vue/tsconfig": "npm:^0.7.0"
+    konva: "npm:^10.0.1"
     npm-run-all2: "npm:^8.0.4"
     tailwindcss: "npm:^4.1.11"
     typescript: "npm:~5.8.0"
     vite: "npm:^7.0.6"
     vite-plugin-vue-devtools: "npm:^8.0.0"
     vue: "npm:^3.5.21"
+    vue-konva: "npm:^3.2.6"
     vue-tsc: "npm:^3.0.4"
   languageName: unknown
   linkType: soft
@@ -2086,6 +2088,13 @@ __metadata:
   version: 1.8.0
   resolution: "kolorist@npm:1.8.0"
   checksum: 10c0/73075db44a692bf6c34a649f3b4b3aea4993b84f6b754cbf7a8577e7c7db44c0bad87752bd23b0ce533f49de2244ce2ce03b7b1b667a85ae170a94782cc50f9b
+  languageName: node
+  linkType: hard
+
+"konva@npm:^10.0.1":
+  version: 10.0.1
+  resolution: "konva@npm:10.0.1"
+  checksum: 10c0/a0a1356818bba856b68046f5b6e275fe767715e1021c7a5e24b5e9e48756241006207cfaea0d2fccf8142f62aebf30aaba0d7649b7bad5985b1855232c376485
   languageName: node
   linkType: hard
 
@@ -3173,6 +3182,16 @@ __metadata:
   version: 3.1.0
   resolution: "vscode-uri@npm:3.1.0"
   checksum: 10c0/5f6c9c10fd9b1664d71fab4e9fbbae6be93c7f75bb3a1d9d74399a88ab8649e99691223fd7cef4644376cac6e94fa2c086d802521b9a8e31c5af3e60f0f35624
+  languageName: node
+  linkType: hard
+
+"vue-konva@npm:^3.2.6":
+  version: 3.2.6
+  resolution: "vue-konva@npm:3.2.6"
+  peerDependencies:
+    konva: ">7"
+    vue: ^3
+  checksum: 10c0/8d8ee44cc18162a3b9df6aafd25bb46ea85f59e97d210fcb8fa6b5baab3c1081701b682dad0b0a759d146950b1b0ae0d93516b6cc92dc3af64c48c915e5f5bf3
   languageName: node
   linkType: hard
 
