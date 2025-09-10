@@ -16,7 +16,7 @@
         <!-- Add new scene card -->
         <div 
           class="bg-(--dark-orange) p-6 rounded-lg cursor-pointer flex flex-col items-center justify-center
-          hover:bg-gray-600 transition-colors border-2  border-(--light-orange)"
+          hover:bg-[#463d2f] transition-colors border-2  border-(--light-orange)"
           @click="createNewScene"
         >
           <Icon icon="material-symbols:add" class="text-4xl mb-2" />

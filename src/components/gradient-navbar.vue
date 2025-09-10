@@ -3,21 +3,21 @@
     text-sm"
   >
     <!-- The first tab, for the scene overview -->
-    <router-link to="/scenes-overview" 
+    <router-link to="/" 
       class="w-48 h-10 mt-2 ml-2 flex justify-center items-center text-white/50
       cursor-pointer hover:text-white rounded-t-lg relative"
-      active-class="bg-(--scene-overview-bg) !text-white': $route.path === '/scenes-overview"
+      active-class="bg-(--scene-overview-bg) !text-white': $route.path === '/"
       
     >
       <div class="absolute bottom-0 -left-4 rounded-br-xl bg-transparent w-4 h-4
         shadow-[0.5rem_0_0_0] shadow-[#0D1114]" 
-        v-if="$route.path === '/scenes-overview'  "
+        v-if="$route.path === '/'  "
       ></div>
       <Icon icon="material-symbols:folder-outline" class="mr-4 text-lg"></Icon>
       Scenes overview
       <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
         shadow-[-0.5rem_0_0_0] shadow-[#0D1114]"
-        v-if="$route.path === `/scenes-overview` "
+        v-if="$route.path === `/` "
       >
       </div>
     </router-link>
