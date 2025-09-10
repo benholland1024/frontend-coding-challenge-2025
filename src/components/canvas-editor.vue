@@ -18,6 +18,18 @@
           }"
           @click="handleElementClick"
         />
+        <v-image
+          v-for="bg in backgrounds"
+          :key="bg.id"
+          :config="bg"
+          @click="handleElementClick"
+        />
+        <v-image
+          v-for="image in images"
+          :key="image.id"
+          :config="image"
+          @click="handleElementClick"
+        />
         <v-rect
           v-for="box in boxes"
           :key="box.id"
@@ -30,6 +42,7 @@
           :config="text"
           @click="handleElementClick"
         />
+        
         <v-transformer ref="transformer" />
       </v-layer>
     </v-stage>
@@ -45,6 +58,8 @@ const {
   stageConfig, 
   boxes, 
   texts, 
+  images,
+  backgrounds,
   handleElementClick, 
   handleStageClick
 } = useCanvas()

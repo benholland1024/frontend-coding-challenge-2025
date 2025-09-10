@@ -94,6 +94,22 @@
           >
         </div>
       </div>
+
+      <!-- For images -->
+      <div v-else-if="selectedElementType === 'image' || selectedElementType === 'background'">
+        <div class="p-2 m-2 bg-[#21272C]">
+          <label class="block mb-1">Opacity:</label>
+          <input 
+            type="range" 
+            min="0" 
+            max="1" 
+            step="0.1"
+            :value="selectedElementConfig.opacity || 1"
+            @input="updateSelectedElement('opacity', Number($event.target?.value))"
+            class="w-full"
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>

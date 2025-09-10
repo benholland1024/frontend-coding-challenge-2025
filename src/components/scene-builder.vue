@@ -5,6 +5,10 @@
     <h3 class="font-bold text-(--light-orange) text-sm text-left mb-3" v-else>Foreground</h3>
     <!-- Element list  -->
     <div>
+      <div v-for="image in images" class="flex items-center gap-3 cursor-pointer" @click="selectElementById(image.id)">
+        <Icon icon="fluent:text-12-filled" class="text-white"></Icon>
+        {{ image.id }}
+      </div>
       <div v-for="box in boxes" class="flex items-center gap-3 cursor-pointer" @click="selectElementById(box.id)">
         <Icon icon="radix-icons:box" class="text-white"></Icon>
         {{ box.id }}
@@ -13,21 +17,77 @@
         <Icon icon="fluent:text-12-filled" class="text-white"></Icon>
         {{ text.id }}
       </div>
+      <div v-for="image in backgrounds" class="flex items-center gap-3 cursor-pointer" @click="selectElementById(image.id)">
+        <Icon icon="fluent:text-12-filled" class="text-white"></Icon>
+        {{ image.id }}
+      </div>
     </div>
-    <button class="m-2 mt-4 bg-(--dark-orange) rounded-lg text-(--light-orange) border 
-      border-(--light-orange) px-2 py-1 flex items-center justify-center
+    <button class="m-2 mt-4 bg-(--dark-orange) rounded-lg text-(--light-orange) 
+      px-2 py-1 flex items-center justify-center
       hover:bg-(--light-orange) hover:text-(--dark-orange) transition-colors
-      cursor-pointer"
+      cursor-pointer" @click.stop="showWidgetAdder = !showWidgetAdder"
     >
       <Icon icon="mingcute:grid-2-line" class="mr-1"></Icon>
       Add widget
       <Icon icon="line-md:chevron-right" class="ml-2"></Icon>
     </button>
+
+    <!-- Widget adder -->
+    <div v-if="showWidgetAdder" class="absolute -right-55 top-0 bg-(--header-blue) border
+     border-gray-600 p-2 w-50 rounded-lg" @click.stop>
+      <div class="text-white/50 text-sm">Backgrounds</div>
+      <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
+        flex-col items-center"
+      >
+        <img src="@/assets/circuit_bg.png" alt="circuit_bg" class="w-40 m-1"
+          @click="addBackground(circuitBg)"/>
+        Circuit background
+      </div>
+      <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
+        flex-col items-center"
+      >
+        <img src="@/assets/rainbow_bg.png" alt="circuit_bg" class="w-40 m-1"
+          @click="addBackground(rainbowBg)"/>
+        Colorful background
+      </div>
+      <hr class="my-1 border-gray-600"/>
+      <div class="text-white/50 text-sm">Screens</div>
+      <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
+        flex-col items-center"
+      >
+        <img src="@/assets/big_screen.png" alt="circuit_bg" class="w-40 m-1"
+          @click="addImage(bigScreen, 350, 75, 460, 365)"/>
+        Big circuit screen
+      </div>
+      <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
+        flex-col items-center"
+      >
+        <img src="@/assets/small_screen.png" alt="circuit_bg" class="w-40 m-1"
+          @click="addImage(smallScreen, 840, 120, 350, 250)"/>
+        Small screen
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useCanvas } from '@/composables/useCanvas'
 import { Icon } from '@iconify/vue'
-const { boxes, texts, selectElementById } = useCanvas()
+import circuitBg from '@/assets/circuit_bg.png'
+import rainbowBg from '@/assets/rainbow_bg.png'
+import bigScreen from '@/assets/big_screen.png'
+import smallScreen from '@/assets/small_screen.png'
+
+const { 
+  boxes, 
+  texts, 
+  images,
+  backgrounds,
+  addImage,
+  addBackground,
+  selectElementById, 
+  showWidgetAdder
+} = useCanvas()
+
+
 </script>

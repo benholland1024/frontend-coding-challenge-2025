@@ -25,15 +25,29 @@
 
     <!-- The save button  -->
     <div class="flex-1"></div>
-    <button class="w-24 h-8 m-2 bg-[#55F37F] text-white flex items-center rounded
-      cursor-pointer">
-      <Icon icon="mdi:content-save" class="mx-4 text-white text-lg"></Icon>
-      Save
+    <button class="w-30 h-8 m-2 bg-[#55F37F] text-white flex items-center rounded
+      cursor-pointer" @click="save">
+      <Icon icon="mdi:content-save" class="mx-4 text-white text-lg" v-if="savingState == 'idle'"></Icon>
+      <Icon icon="mdi:loading" class="mx-4 text-white text-lg animate-spin" v-else-if="savingState == 'saving'"></Icon>
+      <Icon icon="mdi:check" class="mx-4 text-white text-lg" v-else-if="savingState == 'just-saved'"></Icon>
+      <span v-if="savingState != 'just-saved'">Save</span>
+      <span v-else>Saved!</span>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
+import { ref } from "vue";
+const savingState = ref<'saving' | 'just-saved' | 'idle'>('idle')
 
+function save() {
+  savingState.value = 'saving'
+  setTimeout(() => {
+    savingState.value = 'just-saved'
+    setTimeout(() => {
+      savingState.value = 'idle'
+    }, 1000)
+  }, 1000)
+}
 </script>
