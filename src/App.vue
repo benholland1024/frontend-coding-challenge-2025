@@ -1,5 +1,5 @@
 <template>
-  <div class="font-body h-screen md:flex flex-col hidden relative">
+  <div class="font-body h-screen md:flex flex-col hidden relative overflow-hidden">
     <!-- <h1 class="text-3xl font-bold underline text-blue-500" >
       Welcome to the OWN3D Coding Challenge!
     </h1> -->
@@ -13,7 +13,7 @@
     <router-view />
 
     <a href="https://github.com/benholland1024/frontend-coding-challenge-2025" target="_blank" 
-      class="text-white/50 hover:text-white text-8xl absolute bottom-4 right-4 z-100">
+      class="text-white/50 hover:text-white text-3xl absolute bottom-4 right-4 z-100">
       <Icon icon="mdi:github" />
     </a>
   </div>
