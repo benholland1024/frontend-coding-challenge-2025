@@ -15,13 +15,12 @@
         
         <!-- Add new scene card -->
         <div 
-          class="bg-gray-700 p-6 rounded-lg cursor-pointer hover:bg-gray-600 transition-colors border-2 border-dashed border-gray-500"
+          class="bg-(--dark-orange) p-6 rounded-lg cursor-pointer flex flex-col items-center justify-center
+          hover:bg-gray-600 transition-colors border-2  border-(--light-orange)"
           @click="createNewScene"
         >
-          <div class="text-center">
-            <Icon icon="material-symbols:add" class="text-4xl mb-2" />
-            <p>Create New Scene</p>
-          </div>
+          <Icon icon="material-symbols:add" class="text-4xl mb-2" />
+          <p>Create New Scene</p>
         </div>
       </div>
     </div>

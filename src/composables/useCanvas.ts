@@ -4,6 +4,10 @@ import { ref, reactive, computed } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
+import circuitBg from '@/assets/circuit_bg.png'
+import bigScreen from '@/assets/big_screen.png'
+import smallScreen from '@/assets/small_screen.png'
+
 interface Scene {
   id: string
   name: string
@@ -18,12 +22,20 @@ interface Scene {
 // Global state
 const scenes = ref<Scene[]>([
   {
-    id: 'my-scene',
-    name: 'My Scene',
+    id: 'sample-scene',
+    name: 'Sample scene',
     description: 'A sample scene with boxes and text',
     lastEdited: new Date(),
     boxes: [],
-    texts: [],
+    texts: [{
+      id: `twitch-username`,
+      x: 540,
+      y: 475,
+      text: '@your_twitch_name',
+      fontSize: 16,
+      fill: '#ffffff',
+      draggable: true
+    }],
     images: [],
     backgrounds: []
   }
@@ -46,12 +58,68 @@ const stageConfig = reactive({
   height: window.innerHeight  //  It doesn't matter, since the parent div has overflow-hidden.
 })
 
-//  Define arrays of boxes and texts, using Konva's config types.
-const boxes = ref<Konva.RectConfig[]>([])
-const texts = ref<Konva.TextConfig[]>([])
-const images = ref<Konva.ImageConfig[]>([])
-const backgrounds = ref<Konva.ImageConfig[]>([])
 
+const initializeDefaultScene = () => {
+  console.log("hi")
+  const sampleScene = scenes.value.find(s => s.id === 'sample-scene')
+  if (sampleScene && sampleScene.images.length === 0) {
+    // Add big screen
+    const bigScreenImg = new Image()
+    bigScreenImg.onload = () => {
+      sampleScene.images.push({
+        id: 'big-screen',
+        x: 350,
+        y: 75,
+        width: 460,
+        height: 365,
+        image: bigScreenImg,
+        draggable: true,
+      })
+    }
+    bigScreenImg.src = bigScreen
+    
+    // Add small screen
+    const smallScreenImg = new Image()
+    smallScreenImg.onload = () => {
+      sampleScene.images.push({
+        id: 'small-screen-1',
+        x: 840,
+        y: 120,
+        width: 350,
+        height: 250,
+        image: smallScreenImg,
+        draggable: true,
+      })
+      sampleScene.images.push({
+        id: 'small-screen-2',
+        x: 840,
+        y: 380,
+        width: 350,
+        height: 250,
+        image: smallScreenImg,
+        draggable: true,
+      })
+    }
+    smallScreenImg.src = smallScreen
+
+    // Add bg
+    const circuitBgImg = new Image()
+    circuitBgImg.onload = () => {
+      sampleScene.backgrounds.push({
+        id: 'circuit-bg',
+        x: 300,
+        y: 50,
+        width: 900,
+        height: 600,
+        image: circuitBgImg,
+        draggable: true,
+      })
+    }
+    circuitBgImg.src = circuitBg
+
+  }
+}
+initializeDefaultScene()
 
 
 export function useCanvas() {
@@ -315,20 +383,39 @@ export function useCanvas() {
       }
     }
   }
+
+  const handleWindowResize = () => {
+    stageConfig.width = window.innerWidth
+    stageConfig.height = window.innerHeight
+    
+    // Force stage to redraw with new dimensions
+    if (stage.value) {
+      stage.value.getNode().size({
+        width: stageConfig.width,
+        height: stageConfig.height
+      })
+      stage.value.getNode().draw()
+    }
+  }
   
   // Close widget adder when clicking outside
   const handleClickOutside = () => {
     showWidgetAdder.value = false
   }
+
+  
   
   onMounted(() => {
     document.addEventListener('click', handleClickOutside)
     document.addEventListener('keydown', handleKeydown)
+    window.addEventListener('resize', handleWindowResize) 
+    
   })
 
   onUnmounted(() => {
     document.removeEventListener('click', handleClickOutside)
     document.removeEventListener('keydown', handleKeydown)
+    window.removeEventListener('resize', handleWindowResize) 
   })
 
   return {
