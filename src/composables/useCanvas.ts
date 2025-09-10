@@ -22,17 +22,17 @@ interface Scene {
 // Global state
 const scenes = ref<Scene[]>([
   {
-    id: 'sample-scene',
-    name: 'Sample scene',
+    id: 'beispielszene',
+    name: 'Beispielszene',
     description: 'A sample scene with boxes and text',
     lastEdited: new Date(),
     boxes: [],
     texts: [{
-      id: `twitch-username`,
+      id: `twitch`,
       x: 540,
       y: 475,
-      text: '@your_twitch_name',
-      fontSize: 16,
+      text: '@twitch_benutzername',
+      fontSize: 15,
       fill: '#ffffff',
       draggable: true
     }],
@@ -61,13 +61,13 @@ const stageConfig = reactive({
 
 const initializeDefaultScene = () => {
   console.log("hi")
-  const sampleScene = scenes.value.find(s => s.id === 'sample-scene')
+  const sampleScene = scenes.value.find(s => s.id === 'beispielszene')
   if (sampleScene && sampleScene.images.length === 0) {
     // Add big screen
     const bigScreenImg = new Image()
     bigScreenImg.onload = () => {
       sampleScene.images.push({
-        id: 'big-screen',
+        id: 'bildschirm-1',
         x: 350,
         y: 75,
         width: 460,
@@ -82,7 +82,7 @@ const initializeDefaultScene = () => {
     const smallScreenImg = new Image()
     smallScreenImg.onload = () => {
       sampleScene.images.push({
-        id: 'small-screen-1',
+        id: 'bildschirm-2',
         x: 840,
         y: 120,
         width: 350,
@@ -91,7 +91,7 @@ const initializeDefaultScene = () => {
         draggable: true,
       })
       sampleScene.images.push({
-        id: 'small-screen-2',
+        id: 'bildschirm-3',
         x: 840,
         y: 380,
         width: 350,
@@ -106,7 +106,7 @@ const initializeDefaultScene = () => {
     const circuitBgImg = new Image()
     circuitBgImg.onload = () => {
       sampleScene.backgrounds.push({
-        id: 'circuit-bg',
+        id: 'schaltung-bg',
         x: 300,
         y: 50,
         width: 900,
@@ -139,7 +139,7 @@ export function useCanvas() {
   // Create new scene
   const createScene = (name: string = 'New Scene'): Scene => {
     const newScene: Scene = {
-      id: `scene-${Date.now()}`,
+      id: `szene-${Date.now()}`,
       name,
       description: 'A new scene',
       lastEdited: new Date(),
@@ -187,7 +187,7 @@ export function useCanvas() {
       id: `text-${texts.value.length + 1}`,
       x: 350,
       y: 350,
-      text: 'Edit me',
+      text: 'Bearbeite mich',
       fontSize: 16,
       fill: '#ffffff',
       draggable: true

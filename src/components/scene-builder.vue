@@ -1,6 +1,6 @@
 <template>
   <!-- Scene builder (left bar) -->
-  <div class="bg-(--header-blue) p-4 rounded-lg absolute left-8 top-8 w-48 text-center z-2">
+  <div class="bg-(--header-blue) p-4 rounded-lg absolute left-4 top-8 w-64 text-center z-2">
     <h3 class="font-bold" v-if="!boxes.length && !texts.length">Scene builder</h3>
     <h3 class="font-bold text-(--light-orange) text-sm text-left mb-3" v-else>Foreground</h3>
     <!-- Element list  -->
@@ -28,27 +28,29 @@
       cursor-pointer" @click.stop="showWidgetAdder = !showWidgetAdder"
     >
       <Icon icon="mingcute:grid-2-line" class="mr-1"></Icon>
-      Add widget
+      Widget hinzufügen
       <Icon icon="line-md:chevron-right" class="ml-2"></Icon>
     </button>
 
     <!-- Widget adder -->
     <div v-if="showWidgetAdder" class="absolute -right-55 top-0 bg-(--header-blue) border
      border-gray-600 p-2 w-50 rounded-lg" @click.stop>
-      <div class="text-white/50 text-sm">Backgrounds</div>
+      <div class="text-white/50 text-sm">Hintergründe</div>
       <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
         flex-col items-center"
       >
         <img src="@/assets/circuit_bg.png" alt="circuit_bg" class="w-40 m-1"
-          @click="addBackground(circuitBg)"/>
-        Circuit background
+          @click="addBackground(circuitBg)"
+        />
+        Schaltungshintergrund
       </div>
       <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
         flex-col items-center"
       >
         <img src="@/assets/rainbow_bg.png" alt="circuit_bg" class="w-40 m-1"
-          @click="addBackground(rainbowBg)"/>
-        Colorful background
+          @click="addBackground(rainbowBg)"
+        />
+        Bunten Hintergrund
       </div>
       <hr class="my-1 border-gray-600"/>
       <div class="text-white/50 text-sm">Screens</div>
@@ -56,15 +58,17 @@
         flex-col items-center"
       >
         <img src="@/assets/big_screen.png" alt="circuit_bg" class="w-40 m-1"
-          @click="addImage(bigScreen, 350, 75, 460, 365)"/>
-        Big circuit screen
+          @click="addImage(bigScreen, 350, 75, 460, 365)"
+        />
+        Großer Schaltkreisbildschirm
       </div>
       <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
         flex-col items-center"
       >
         <img src="@/assets/small_screen.png" alt="circuit_bg" class="w-40 m-1"
-          @click="addImage(smallScreen, 840, 120, 350, 250)"/>
-        Small screen
+          @click="addImage(smallScreen, 840, 120, 350, 250)"
+        />
+        Kleiner Bildschirm
       </div>
     </div>
   </div>

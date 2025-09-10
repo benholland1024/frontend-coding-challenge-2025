@@ -20,7 +20,7 @@
           @click="createNewScene"
         >
           <Icon icon="material-symbols:add" class="text-4xl mb-2" />
-          <p>Create New Scene</p>
+          <p>Neue Szene erstellen</p>
         </div>
       </div>
     </div>
