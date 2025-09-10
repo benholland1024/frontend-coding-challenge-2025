@@ -19,11 +19,11 @@
         <h3 class="font-bold text-(--light-orange) text-sm text-left mb-3" v-else>Foreground</h3>
         <!-- Element list  -->
         <div>
-          <div v-for="box in boxes" class="flex items-center gap-3">
+          <div v-for="box in boxes" class="flex items-center gap-3 cursor-pointer" @click="selectElementById(box.id)">
             <Icon icon="radix-icons:box" class="text-white"></Icon>
             {{ box.id }}
           </div>
-          <div v-for="text in texts" class="flex items-center gap-3">
+          <div v-for="text in texts" class="flex items-center gap-3 cursor-pointer" @click="selectElementById(text.id)">
             <Icon icon="fluent:text-12-filled" class="text-white"></Icon>
             {{ text.id }}
           </div>
@@ -47,6 +47,19 @@
           @mousedown="handleStageClick"
         >
           <v-layer>
+            <v-rect
+              :config="{
+                x: 300,
+                y: 50,
+                width: 900,
+                height: 600,
+                fill: '#0A0E12',
+                listening: false
+              }"
+              @transformend="handleTransform"
+              @dragend="handleDrag"
+              @click="handleElementClick"
+            />
             <v-rect
               v-for="box in boxes"
               :key="box.id"
@@ -176,20 +189,25 @@
           
           <!-- For text -->
           <div v-if="selectedElementType === 'text'">
-            <label class="block mb-1">Text:</label>
-            <input 
-              type="text" 
-              :value="selectedElementConfig.text" 
-              @input="updateSelectedElement('text', $event.target.value)"
-              class="w-full px-2 py-1 rounded bg-gray-700 text-white"
-            >
-            <label class="block mb-1 mt-2">Font Size:</label>
-            <input 
-              type="number" 
-              :value="selectedElementConfig.fontSize" 
-              @input="updateSelectedElement('fontSize', Number($event.target.value))"
-              class="w-full px-2 py-1 rounded bg-gray-700 text-white"
-            >
+            <h6 class="text-white/50">Text</h6>
+            <div class="p-2 m-2 bg-[#21272C]">
+              <label class="block mb-1">Text:</label>
+              <input 
+                type="text" 
+                :value="selectedElementConfig.text" 
+                @input="updateSelectedElement('text', $event.target?.value)"
+                class="w-full px-2 py-1 rounded bg-gray-700 text-white"
+              >
+            </div>
+            <div class="p-2 m-2 bg-[#21272C]">
+              <label class="block mb-1 mt-2">Font Size:</label>
+              <input 
+                type="number" 
+                :value="selectedElementConfig.fontSize" 
+                @input="updateSelectedElement('fontSize', Number($event.target?.value))"
+                class="w-full px-2 py-1 rounded bg-gray-700 text-white"
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -239,7 +257,7 @@ const addBox = () => {
   }, 200);
   boxes.value.push({
     id: `box-${boxes.value.length + 1}`,
-    x: 300,
+    x: 320,
     y: 300,
     width: 100,
     height: 100,
@@ -294,6 +312,35 @@ function handleElementClick(e: any) {
   // Attach transformer
   if (transformer.value) {
     transformer.value.getNode().nodes([clickedElement])
+  }
+}
+
+function selectElementById(elementId: string | undefined) {
+  if (!stage.value) return
+  
+  // Find the Konva element by ID
+  const konvaElement = stage.value.getNode().findOne(`#${elementId}`)
+  
+  if (konvaElement) {
+    selectedElement.value = konvaElement
+    
+    if (konvaElement.className === 'Rect') {
+      selectedElementType.value = 'rect'
+      selectedElementConfig.value = boxes.value.find(box => box.id === elementId)
+    } else if (konvaElement.className === 'Text') {
+      selectedElementType.value = 'text'
+      selectedElementConfig.value = texts.value.find(text => text.id === elementId)
+    }
+    
+    const elementPos = konvaElement.getAbsolutePosition()
+    toolbarPosition.value = {
+      x: elementPos.x + 120,
+      y: elementPos.y - 10
+    }
+    
+    if (transformer.value) {
+      transformer.value.getNode().nodes([konvaElement])
+    }
   }
 }
 
