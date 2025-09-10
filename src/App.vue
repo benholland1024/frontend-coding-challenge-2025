@@ -10,19 +10,7 @@
     <!-- Gradient bar, with tabs -->
     <gradient-navbar />
 
-    <!-- Main content area -->
-    <div class="h-screen bg-[#21272C] relative text-white">
-
-      <scene-builder /> <!-- Left sidebar -->
-
-      <canvas-editor /> <!-- The canvas -->
-
-      <cursor-modes /> <!-- The bottom toolbar -->
-
-      <!-- Element toolbar popup -->
-      <toolbar-popup />
-
-    </div> <!-- End of main content area -->
+    <router-view />
   </div>
 </template>
 
@@ -30,9 +18,5 @@
 <script setup lang="ts">
 import TopNavbar from './components/top-navbar.vue'
 import GradientNavbar from './components/gradient-navbar.vue'
-import sceneBuilder from './components/scene-builder.vue';
-import canvasEditor from './components/canvas-editor.vue';
-import cursorModes from './components/cursor-modes.vue';
-import toolbarPopup from './components/toolbar-popup.vue';
 
 </script>

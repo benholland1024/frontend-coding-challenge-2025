@@ -1,7 +1,33 @@
 
 import Konva from 'konva'
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+
+interface Scene {
+  id: string
+  name: string
+  description: string
+  lastEdited: Date
+  boxes: Konva.RectConfig[]
+  texts: Konva.TextConfig[]
+  images: Konva.ImageConfig[]
+  backgrounds: Konva.ImageConfig[]
+}
+
+// Global state
+const scenes = ref<Scene[]>([
+  {
+    id: 'my-scene',
+    name: 'My Scene',
+    description: 'A sample scene with boxes and text',
+    lastEdited: new Date(),
+    boxes: [],
+    texts: [],
+    images: [],
+    backgrounds: []
+  }
+])
 
 const stage = ref()                //  The canvas
 const transformer = ref()          //  The transformer for selected elements
@@ -29,15 +55,44 @@ const backgrounds = ref<Konva.ImageConfig[]>([])
 
 
 export function useCanvas() {
+  const route = useRoute()
+
+  const currentScene = computed(() => {
+    const sceneId = route.params.sceneId as string
+    return scenes.value.find(scene => scene.id === sceneId)
+  })
+  
+  // Current scene's elements (reactive to route changes)
+  const boxes = computed(() => currentScene.value?.boxes || [])
+  const texts = computed(() => currentScene.value?.texts || [])
+  const images = computed(() => currentScene.value?.images || [])
+  const backgrounds = computed(() => currentScene.value?.backgrounds || [])
+  
+  // Create new scene
+  const createScene = (name: string = 'New Scene'): Scene => {
+    const newScene: Scene = {
+      id: `scene-${Date.now()}`,
+      name,
+      description: 'A new scene',
+      lastEdited: new Date(),
+      boxes: [],
+      texts: [],
+      images: [],
+      backgrounds: []
+    }
+    scenes.value.push(newScene)
+    return newScene
+  }
 
   //  Add a box to the canvas
   const addBox = () => {
+    if (!currentScene.value) return
 
     cursorMode.value = 'shape';
     setTimeout(() => {
       cursorMode.value = 'cursor';
     }, 200);
-    boxes.value.push({
+    currentScene.value.boxes.push({
       id: `box-${boxes.value.length + 1}`,
       x: 320,
       y: 300,
@@ -54,11 +109,13 @@ export function useCanvas() {
 
   //  Add editable text to the canvas
   const addText = () => {
+    if (!currentScene.value) return
+
     cursorMode.value = 'text';
     setTimeout(() => {
       cursorMode.value = 'cursor';
     }, 200);
-    texts.value.push({
+    currentScene.value.texts.push({
       id: `text-${texts.value.length + 1}`,
       x: 350,
       y: 350,
@@ -71,19 +128,24 @@ export function useCanvas() {
 
   // Add an image to canvas
   const addImage = (url: string, x: number, y: number, w: number, h: number) => {
+    if (!currentScene.value) return
+
     let imageSrc = url
     // Create image element to load the image
     const imageObj = new Image()
     imageObj.onload = () => {
-      images.value.push({
-        id: `image-${images.value.length + 1}`,
-        x: x,
-        y: y,
-        width: w,
-        height: h,
-        image: imageObj,
-        draggable: true, 
-      })
+      if (currentScene.value) {
+        currentScene.value.images.push({
+          id: `image-${currentScene.value.images.length + 1}`,
+          x: x,
+          y: y,
+          width: w,
+          height: h,
+          image: imageObj,
+          draggable: true,
+        })
+        currentScene.value.lastEdited = new Date()
+      }
     }
     imageObj.src = imageSrc
     
@@ -97,15 +159,18 @@ export function useCanvas() {
     // Create image element to load the image
     const imageObj = new Image()
     imageObj.onload = () => {
-      backgrounds.value.push({
-        id: `bg-${backgrounds.value.length + 1}`,
-        x: 300,
-        y: 50,
-        width: 900,
-        height: 600,
-        image: imageObj,
-        draggable: true,
-      })
+      if (currentScene.value) {
+        currentScene.value.backgrounds.push({
+          id: `bg-${currentScene.value.backgrounds.length + 1}`,
+          x: 300,
+          y: 50,
+          width: 900,
+          height: 600,
+          image: imageObj,
+          draggable: true,
+        })
+        currentScene.value.lastEdited = new Date()
+      }
     }
     imageObj.src = imageSrc
     
@@ -267,6 +332,11 @@ export function useCanvas() {
   })
 
   return {
+    //  Scenes
+    scenes,
+    currentScene,
+    createScene,
+
     // Canvas
     stage,
     transformer,

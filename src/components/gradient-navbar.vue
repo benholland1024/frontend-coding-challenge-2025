@@ -2,26 +2,45 @@
   <div class="bg-linear-[90deg,#21272C_0%,#254954_30%,#254954_60%,#21272C_100%] h-12 flex
     text-sm"
   >
-    <!-- The first tab (transparent bg) -->
-    <div class="w-48 h-10 mt-2 flex justify-center items-center text-white/50
-      cursor-pointer hover:text-white transition-colors"
+    <!-- The first tab, for the scene overview -->
+    <router-link to="/scenes-overview" 
+      class="w-48 h-10 mt-2 ml-2 flex justify-center items-center text-white/50
+      cursor-pointer hover:text-white rounded-t-lg relative"
+      active-class="bg-(--scene-overview-bg) !text-white': $route.path === '/scenes-overview"
+      
     >
+      <div class="absolute bottom-0 -left-4 rounded-br-xl bg-transparent w-4 h-4
+        shadow-[0.5rem_0_0_0] shadow-[#0D1114]" 
+        v-if="$route.path === '/scenes-overview'  "
+      ></div>
       <Icon icon="material-symbols:folder-outline" class="mr-4 text-lg"></Icon>
       Scenes overview
-    </div>
+      <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
+        shadow-[-0.5rem_0_0_0] shadow-[#0D1114]"
+        v-if="$route.path === `/scenes-overview` "
+      >
+      </div>
+    </router-link>
 
-    <!-- The second tab (colored bg)-->
-    <div class="w-48 bg-[#21272C] h-10 mt-2 flex justify-center items-center text-white
-      rounded-t-lg relative">
+    <!-- The scene tabs-->
+    <router-link v-for="scene in scenes" :key="scene.id" :to="`/scene/${scene.id}`"
+      class="w-48 h-10 mt-2 flex justify-center items-center text-white/50 
+      hover:text-white rounded-t-lg relative"
+      active-class="bg-[#21272C] text-white': $route.path === `/scene/${scene.id}"
+    >
       <div class="absolute bottom-0 -left-4 rounded-br-xl bg-transparent w-4 h-4
-        shadow-[0.5rem_0_0_0] shadow-[#21272C]">
+        shadow-[0.5rem_0_0_0] shadow-[#21272C] transition-colors" 
+        v-if="$route.path === `/scene/${scene.id}` "
+      >
       </div>
       <Icon icon="material-symbols:check" class="mr-4 text-lg"></Icon>
-      My Scene
+      {{scene.name}}
       <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
-        shadow-[-0.5rem_0_0_0] shadow-[#21272C]">
+        shadow-[-0.5rem_0_0_0] shadow-[#21272C] transition-colors"
+        v-if="$route.path === `/scene/${scene.id}` "
+      >
       </div>
-    </div>
+    </router-link>
 
     <!-- The save button  -->
     <div class="flex-1"></div>
@@ -39,7 +58,11 @@
 <script setup lang="ts">
 import { Icon } from "@iconify/vue";
 import { ref } from "vue";
+import { useRoute } from "vue-router";
+import { useCanvas } from '@/composables/useCanvas'
 const savingState = ref<'saving' | 'just-saved' | 'idle'>('idle')
+
+const route = useRoute();
 
 function save() {
   savingState.value = 'saving'
@@ -50,4 +73,8 @@ function save() {
     }, 1000)
   }, 1000)
 }
+
+const { 
+  scenes
+} = useCanvas()
 </script>
