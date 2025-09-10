@@ -44,7 +44,7 @@ const openScene = (sceneId: string) => {
 
 const createNewScene = () => {
   const newScene = createScene()
-  const newSceneId = `scene-${Date.now()}`
+  const newSceneId = `szene-${Date.now()}`
 
   router.push(`/scene/${newSceneId}`)
 }
