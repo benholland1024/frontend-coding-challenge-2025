@@ -49,8 +49,7 @@
       <Icon icon="mdi:content-save" class="mx-4 text-white text-lg" v-if="savingState == 'idle'"></Icon>
       <Icon icon="mdi:loading" class="mx-4 text-white text-lg animate-spin" v-else-if="savingState == 'saving'"></Icon>
       <Icon icon="mdi:check" class="mx-4 text-white text-lg" v-else-if="savingState == 'just-saved'"></Icon>
-      <span v-if="savingState != 'just-saved'">Save</span>
-      <span v-else>Saved!</span>
+      <span >Speichern</span>
     </button>
   </div>
 </template>
