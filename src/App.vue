@@ -113,17 +113,65 @@
           <!-- For rectangles -->
           <div v-if="selectedElementType === 'rect'">
             <h6 class="text-white/50">Colorbox</h6>
-            <div class="flex [&>div]:p-2 text-white/50">
-              <div>Color</div>
-              <div>Border</div>
+            <div class="flex [&>div]:p-2 [&>div]:cursor-pointer text-white/50">
+              <div :class="selectedElementProperty == 'color' ? {
+                  'border-b-2 border-(--light-orange)': true,
+                  'text-white': true,
+                } : {
+                }" @click="selectedElementProperty = 'color'"
+              >Color</div>
+              <div :class="selectedElementProperty === 'border' ? {
+                  'border-b-2 border-(--light-orange)': true,
+                  'text-white': true,
+                } : {
+                }" @click="selectedElementProperty = 'border'"
+              >Border</div>
             </div>
-            <label class="block mb-1">Fill Color:</label>
-            <input 
-              type="color" 
-              :value="selectedElementConfig.fill" 
-              @input="updateSelectedElement('fill', $event.target.value)"
-              class="w-full h-8 rounded"
-            >
+            <div v-if="selectedElementProperty == 'color'">
+              <div class="p-2 m-2 bg-[#21272C]">
+                <label class="block mb-1">Fill Color:</label>
+                <input 
+                  type="color" 
+                  :value="selectedElementConfig.fill" 
+                  @input="updateSelectedElement('fill', $event.target?.value || '')"
+                  class="w-full h-8 rounded"
+                >
+              </div>
+            </div>
+            <div v-else-if="selectedElementProperty === 'border'">
+              <div class="p-2 m-2 bg-[#21272C]">
+                <label class="block mb-1">Border width:</label>
+                <input 
+                  type="number" 
+                  :value="selectedElementConfig.strokeWidth || 1"
+                  @input="updateSelectedElement('strokeWidth', $event.target?.value)"
+                  class="w-full h-8 rounded"
+                  min="0"
+                  step="1"
+                >
+              </div>
+              <div class="p-2 m-2 bg-[#21272C]">
+                <label class="block mb-1">Border Color:</label>
+                <input 
+                  type="color" 
+                  :value="selectedElementConfig.stroke" 
+                  @input="updateSelectedElement('stroke', $event.target?.value)"
+                  class="w-full h-8 rounded"
+                >
+              </div>
+              <div class="p-2 m-2 bg-[#21272C]">
+                <label class="block mb-1">Border radius:</label>
+                <input 
+                  type="number" 
+                  :value="selectedElementConfig.cornerRadius || 1"
+                  @input="updateSelectedElement('cornerRadius', $event.target?.value)"
+                  class="w-full h-8 rounded"
+                  min="0"
+                  step="1"
+                >
+              </div>
+            </div>
+            
           </div>
           
           <!-- For text -->
@@ -166,11 +214,11 @@ import { onMounted, onUnmounted } from 'vue'
 const stage = ref()                //  The canvas
 const transformer = ref()          //  The transformer for selected elements
 const cursorMode = ref('cursor')   //  Options: 'cursor', 'shape', 'text'
-const selectedElement = ref(null)  //  The currently selected element
+const selectedElement = ref<Konva.Rect | Konva.Text | null>(null)  //  The currently selected element
 
 const toolbarPosition = ref<{x: number, y: number} | null>(null)
 const selectedElementType = ref<'rect' | 'text' | null>(null)
-const selectedElementProperty = ref<'color' | 'border' | null>(null)
+const selectedElementProperty = ref<'color' | 'border' | null>('color')
 const selectedElementConfig = ref<any>({})
 
 
@@ -195,9 +243,13 @@ const addBox = () => {
     y: 300,
     width: 100,
     height: 100,
-    fill: `hsl(${Math.random() * 360}, 100%, 50%)`,
-    draggable: true
+    fill: `#` + (Math.random() * 0xfffff * 1000000).toString(16).slice(0, 6),
+    draggable: true,
+    strokeWidth: 0, 
+    cornerRadius: 0,
+    stroke: '#000000'
   })
+  console.log(`#` + (Math.random() * 0xfffff * 1000000).toString(16).slice(0, 6))
 }
 addBox()
 
@@ -247,13 +299,18 @@ function handleElementClick(e: any) {
 
 // Update selected element properties
 function updateSelectedElement(property: string, value: any) {
+  console.log('Updating:', property, 'to:', value, 'type:', typeof value)
+  
   if (!selectedElement.value || !selectedElementConfig.value) return
-  
-  // Update the reactive config
+    if (['strokeWidth', 'width', 'height', 'fontSize', 'cornerRadius'].includes(property)) {
+    value = Number(value)
+    if (isNaN(value)) {
+      console.warn('Invalid number for property:', property)
+      return
+    }
+  }
   selectedElementConfig.value[property] = value
-  
-  // Update the Konva element
-  // selectedElement.value.setAttr(property, value)
+  selectedElement.value.setAttr(property, value)
 }
 
 // Delete selected element
@@ -302,11 +359,11 @@ function handleStageClick(e: any) {
 }
 
 function handleTransform(e: any) {
-  console.log("Transform ended", e.target)
+  // console.log("Transform ended", e.target)
 }
 
 function handleDrag(e: any) {
-  console.log("Drag ended", e.target)
+  // console.log("Drag ended", e.target)
 }
 
 onMounted(() => {
