@@ -1,6 +1,6 @@
 
 import Konva from 'konva'
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, getCurrentInstance } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -423,19 +423,22 @@ export function useCanvas() {
   }
 
   
-  
-  onMounted(() => {
-    document.addEventListener('click', handleClickOutside)
-    document.addEventListener('keydown', handleKeydown)
-    window.addEventListener('resize', handleWindowResize) 
-    
-  })
+  // Only register lifecycle hooks if we're in a component context
+  const instance = getCurrentInstance()
+  if (instance) {
+    onMounted(() => {
+      document.addEventListener('click', handleClickOutside)
+      document.addEventListener('keydown', handleKeydown)
+      window.addEventListener('resize', handleWindowResize) 
+      
+    })
 
-  onUnmounted(() => {
-    document.removeEventListener('click', handleClickOutside)
-    document.removeEventListener('keydown', handleKeydown)
-    window.removeEventListener('resize', handleWindowResize) 
-  })
+    onUnmounted(() => {
+      document.removeEventListener('click', handleClickOutside)
+      document.removeEventListener('keydown', handleKeydown)
+      window.removeEventListener('resize', handleWindowResize) 
+    })
+  }
 
   return {
     //  Scenes

@@ -1,16 +1,22 @@
 <template>
   <div 
     v-if="selectedElement && toolbarPosition"
-    class="absolute bg-(--header-blue) rounded-lg p-2 z-50 min-w-48"
+    class="absolute bg-(--header-blue)/70 backdrop-blur-md rounded-lg p-2 z-50 min-w-48"
     :style="{ 
-      left: toolbarPosition.x + 'px', 
-      top: toolbarPosition.y + 'px' 
+      left: finalPosition.x + 'px', 
+      top: finalPosition.y + 'px' 
     }"
   >
     <div class="flex flex-col gap-2 text-white text-sm">
       <!-- For rectangles -->
       <div v-if="selectedElementType === 'rect'">
-        <h6 class="text-white/50">Colorbox</h6>
+        <div class="flex text-white/50">
+          <Icon icon="icon-park-outline:drag" class="text-lg mr-2 cursor-grab active:cursor-grabbing"
+            @mousedown="startDrag"
+          ></Icon>
+          <h6 >Colorbox</h6>
+        </div>
+        
         <div class="flex [&>div]:p-2 [&>div]:cursor-pointer text-white/50">
           <div :class="selectedElementProperty == 'color' ? {
               'border-b-2 border-(--light-orange)': true,
@@ -74,7 +80,12 @@
       
       <!-- For text -->
       <div v-if="selectedElementType === 'text'">
-        <h6 class="text-white/50">Text</h6>
+        <div class="flex text-white/50">
+          <Icon icon="icon-park-outline:drag" class="text-lg mr-2 cursor-grab active:cursor-grabbing"
+            @mousedown="startDrag"
+          ></Icon>
+          <h6 >Text</h6>
+        </div>
         <div class="p-2 m-2 bg-[#21272C]">
           <label class="block mb-1">Text:</label>
           <input 
@@ -97,6 +108,12 @@
 
       <!-- For images -->
       <div v-else-if="selectedElementType === 'image' || selectedElementType === 'background'">
+        <div class="flex text-white/50">
+          <Icon icon="icon-park-outline:drag" class="text-lg mr-2 cursor-grab active:cursor-grabbing"
+            @mousedown="startDrag"
+          ></Icon>
+          <h6 >Image</h6>
+        </div>
         <div class="p-2 m-2 bg-[#21272C]">
           <label class="block mb-1">Opacity:</label>
           <input 
@@ -116,7 +133,60 @@
 
 <script setup lang="ts">
 import { useCanvas } from '@/composables/useCanvas'
-const { selectedElement, selectedElementConfig, updateSelectedElement, selectedElementType,
-  selectedElementProperty, toolbarPosition
- } = useCanvas()
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { Icon } from '@iconify/vue';
+const {
+  selectedElement,
+  toolbarPosition,
+  selectedElementType,
+  selectedElementProperty,
+  selectedElementConfig,
+  updateSelectedElement
+} = useCanvas()
+
+const toolbarRef = ref<HTMLElement>()
+const dragPosition = ref({ x: 0, y: 0 })
+
+
+const finalPosition = computed(() => {
+  if (!toolbarPosition.value) return { x: 0, y: 0 }
+  
+  const result = {
+    x: toolbarPosition.value.x + dragPosition.value.x,
+    y: toolbarPosition.value.y + dragPosition.value.y
+  }
+  return result
+})
+
+const startDrag = (e: MouseEvent) => {
+  e.preventDefault()
+  
+  const startX = e.clientX
+  const startY = e.clientY
+  const startDragX = dragPosition.value.x
+  const startDragY = dragPosition.value.y
+  
+  const handleMouseMove = (moveEvent: MouseEvent) => {
+    const deltaX = moveEvent.clientX - startX
+    const deltaY = moveEvent.clientY - startY
+    
+    dragPosition.value = {
+      x: startDragX + deltaX,
+      y: startDragY + deltaY
+    }
+  }
+  
+  const handleMouseUp = () => {
+    document.removeEventListener('mousemove', handleMouseMove)
+    document.removeEventListener('mouseup', handleMouseUp)
+  }
+  
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mouseup', handleMouseUp)
+}
+
+// Reset drag position when new element is selected
+watch(toolbarPosition, () => {
+  dragPosition.value = { x: 0, y: 0 }
+})
 </script>
