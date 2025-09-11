@@ -14,13 +14,19 @@
         </div>
         
         <!-- Add new scene card -->
-        <div 
+        <div v-if="scenes.length < 8"
           class="bg-(--dark-orange) p-6 rounded-lg cursor-pointer flex flex-col items-center justify-center
           hover:bg-[#463d2f] transition-colors border-2  border-(--light-orange)"
           @click="createNewScene"
         >
           <Icon icon="material-symbols:add" class="text-4xl mb-2" />
           <p>Neue Szene erstellen</p>
+        </div>
+        <div v-else
+          class="bg-(--dark-orange) p-6 rounded-lg flex flex-col items-center justify-center
+          transition-colors border-2  border-(--light-orange)"
+        >
+          <p>Maximum erreicht</p>
         </div>
       </div>
     </div>

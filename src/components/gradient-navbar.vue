@@ -34,7 +34,11 @@
       >
       </div>
       <Icon icon="material-symbols:check" class="mr-4 text-lg"></Icon>
-      {{scene.name}}
+      <input type="text" class="bg-none text-white w-24 focus:outline-none 
+      focus:ring-0 focus:border-white border-b-1 border-white/50 " spellcheck="false" 
+        v-model="scene.name" v-if="$route.path === `/scene/${scene.id}` "
+      />
+      <span v-else>{{scene.name}}</span>
       <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
         shadow-[-0.5rem_0_0_0] shadow-[#21272C] transition-colors"
         v-if="$route.path === `/scene/${scene.id}` "
@@ -45,7 +49,7 @@
     <!-- The 'add a new scene' button -->
     <div class="bg-[#726333] text-(--light-orange) border border-[#a56300] rounded-lg
       w-8 h-8 flex items-center justify-center text-lg mt-2 ml-4 cursor-pointer hover:bg-[#827343]"
-      @click="createNewScene"
+      @click="createNewScene" v-if="scenes.length < 8"
     >
       +
     </div>

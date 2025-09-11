@@ -21,7 +21,18 @@ const routes = [
     path: '/scene/:sceneId',
     name: 'Scene',
     component: Scene,
-    props: true
+    props: true,
+    beforeEnter: (to: any, from: any, next: any) => {
+      const { scenes } = useCanvas()
+      const sceneId = to.params.sceneId as string
+      const sceneExists = scenes.value.some(scene => scene.id === sceneId)
+      
+      if (sceneExists) {
+        next() // Scene exists, proceed
+      } else {
+        next('/scenes-overview') // Scene doesn't exist, redirect
+      }
+    }
   },
   {
     path: '/:pathMatch(.*)*',
