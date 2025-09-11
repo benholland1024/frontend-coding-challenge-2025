@@ -36,8 +36,8 @@
             <label class="block mb-1">Fill Color:</label>
             <input 
               type="color" 
-              :value="selectedElementConfig.fill" 
-              @input="updateSelectedElement('fill', $event.target?.value || '')"
+              v-model="selectedElementConfig.fill" 
+              @input="updateSelectedElement('fill', selectedElementConfig.fill)"
               class="w-full h-8 rounded"
             >
           </div>
@@ -47,8 +47,8 @@
             <label class="block mb-1">Border width:</label>
             <input 
               type="number" 
-              :value="selectedElementConfig.strokeWidth || 1"
-              @input="updateSelectedElement('strokeWidth', $event.target?.value)"
+              v-model="selectedElementConfig.strokeWidth"
+              @input="updateSelectedElement('strokeWidth', selectedElementConfig.strokeWidth)"
               class="w-full h-8 rounded"
               min="0"
               step="1"
@@ -58,8 +58,8 @@
             <label class="block mb-1">Border Color:</label>
             <input 
               type="color" 
-              :value="selectedElementConfig.stroke" 
-              @input="updateSelectedElement('stroke', $event.target?.value)"
+              v-model="selectedElementConfig.stroke" 
+              @input="updateSelectedElement('stroke', selectedElementConfig.stroke)"
               class="w-full h-8 rounded"
             >
           </div>
@@ -67,8 +67,8 @@
             <label class="block mb-1">Border radius:</label>
             <input 
               type="number" 
-              :value="selectedElementConfig.cornerRadius || 1"
-              @input="updateSelectedElement('cornerRadius', $event.target?.value)"
+              v-model="selectedElementConfig.cornerRadius"
+              @input="updateSelectedElement('cornerRadius', selectedElementConfig.cornerRadius)"
               class="w-full h-8 rounded"
               min="0"
               step="1"
@@ -90,8 +90,9 @@
           <label class="block mb-1">Text:</label>
           <input 
             type="text" 
-            :value="selectedElementConfig.text" 
-            @input="updateSelectedElement('text', $event.target?.value)"
+            v-model="selectedElementConfig.text" 
+            @input="updateSelectedElement('text', selectedElementConfig.text)"
+            @keydown.stop
             class="w-full px-2 py-1 rounded bg-gray-700 text-white"
           >
         </div>
@@ -99,8 +100,8 @@
           <label class="block mb-1 mt-2">Font Size:</label>
           <input 
             type="number" 
-            :value="selectedElementConfig.fontSize" 
-            @input="updateSelectedElement('fontSize', Number($event.target?.value))"
+            v-model="selectedElementConfig.fontSize" 
+            @input="updateSelectedElement('fontSize', selectedElementConfig.fontSize)"
             class="w-full px-2 py-1 rounded bg-gray-700 text-white"
           >
         </div>
@@ -121,8 +122,8 @@
             min="0" 
             max="1" 
             step="0.1"
-            :value="selectedElementConfig.opacity || 1"
-            @input="updateSelectedElement('opacity', Number($event.target?.value))"
+            v-model="selectedElementConfig.opacity"
+            @input="updateSelectedElement('opacity', selectedElementConfig.opacity)"
             class="w-full"
           >
         </div>
