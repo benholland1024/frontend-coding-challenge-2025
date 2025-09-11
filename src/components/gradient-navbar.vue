@@ -36,7 +36,7 @@
       <Icon icon="material-symbols:check" class="mr-4 text-lg"></Icon>
       <input type="text" class="bg-none text-white w-24 focus:outline-none 
       focus:ring-0 focus:border-white border-b-1 border-white/50 " spellcheck="false" 
-        v-model="scene.name" v-if="$route.path === `/scene/${scene.id}` "
+        v-model="scene.name" v-if="$route.path === `/scene/${scene.id}` " @keydown.stop
       />
       <span v-else>{{scene.name}}</span>
       <div class="absolute bottom-0 -right-4 rounded-bl-xl bg-transparent w-4 h-4
@@ -79,12 +79,23 @@ const {
 
 function save() {
   savingState.value = 'saving'
-  setTimeout(() => {
-    savingState.value = 'just-saved'
+  
+  try {
+    // Save scenes to localStorage
+    const scenesData = JSON.stringify(scenes.value)
+    localStorage.setItem('scenes', scenesData)
+    console.log('Scenes saved to localStorage')
+    
     setTimeout(() => {
-      savingState.value = 'idle'
-    }, 1000)
-  }, 1000)
+      savingState.value = 'just-saved'
+      setTimeout(() => {
+        savingState.value = 'idle'
+      }, 1000)
+    }, 300) // Even shorter since localStorage is instant
+  } catch (error) {
+    console.error('Failed to save scenes:', error)
+    savingState.value = 'idle'
+  }
 }
 
 const createNewScene = () => {

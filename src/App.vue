@@ -26,16 +26,13 @@
       <img src="@/assets/mobile_image.png" alt="mobile_device" class="w-32 mx-auto mb-4" />
       <h1 class="text-2xl font-bold mb-4">Mouse first, mobile later</h1>
       <p class="text-white mb-6">
-        You get the best Ben's demo experience on a desktop or tablet with a larger screen.
+        You get the best demo experience on a desktop or tablet with a larger screen.
       </p>
-      <p class="text-white">
+      <p class="text-sm text-gray-400 mt-2">
         Or, check out the source code on 
         <a href="https://github.com/benholland1024/frontend-coding-challenge-2025" class="underlined text-blue-400">
           github
         </a>!
-      </p>
-      <p class="text-sm text-gray-400 mt-2">
-        Psst... Please hire me :)
       </p>
     </div>
   </div>

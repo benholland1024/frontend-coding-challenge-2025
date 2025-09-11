@@ -5,6 +5,7 @@ import { onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import circuitBg from '@/assets/circuit_bg.png'
+import rainbowBg from '@/assets/rainbow_bg.png'
 import bigScreen from '@/assets/big_screen.png'
 import smallScreen from '@/assets/small_screen.png'
 
@@ -38,6 +39,48 @@ const scenes = ref<Scene[]>([
     }],
     images: [],
     backgrounds: []
+  }, {
+    id: 'beispielszene-2',
+    name: 'Beispielszene 2',
+    description: 'A sample scene with boxes and text',
+    lastEdited: new Date(),
+    boxes: [{
+      id: 'bildschirm-1',
+      x: 340,
+      y: 75,
+      width: 460,
+      height: 335,
+      fill: `#777799`,
+      draggable: true,
+      strokeWidth: 0, 
+      cornerRadius: 0,
+      stroke: '#000000'
+    }, {
+      id: 'bildschirm-2',
+      x: 830,
+      y: 80,
+      width: 350,
+      height: 250,
+      fill: `#778899`,
+      draggable: true,
+      strokeWidth: 0, 
+      cornerRadius: 0,
+      stroke: '#000000'
+    }, {
+      id: 'bildschirm-3',
+      x: 830,
+      y: 340,
+      width: 350,
+      height: 250,
+      fill: `#887799`,
+      draggable: true,
+      strokeWidth: 0, 
+      cornerRadius: 0,
+      stroke: '#000000'
+    }],
+    texts: [],
+    images: [],
+    backgrounds: []
   }
 ])
 
@@ -60,7 +103,6 @@ const stageConfig = reactive({
 
 
 const initializeDefaultScene = () => {
-  console.log("hi")
   const sampleScene = scenes.value.find(s => s.id === 'beispielszene')
   if (sampleScene && sampleScene.images.length === 0) {
     // Add big screen
@@ -116,7 +158,22 @@ const initializeDefaultScene = () => {
       })
     }
     circuitBgImg.src = circuitBg
-
+  }
+  const sampleScene2 = scenes.value.find(s => s.id === 'beispielszene-2')
+  if (sampleScene2 && sampleScene2.images.length === 0) {
+    const colorBgImg = new Image()
+    colorBgImg.onload = () => {
+      sampleScene2.backgrounds.push({
+        id: 'schaltung-bg',
+        x: 300,
+        y: 50,
+        width: 900,
+        height: 600,
+        image: colorBgImg,
+        draggable: true,
+      })
+    }
+    colorBgImg.src = rainbowBg
   }
 }
 initializeDefaultScene()
@@ -270,7 +327,6 @@ export function useCanvas() {
     
     const clickedElement = e.target
     selectedElement.value = clickedElement
-  console.log('Element clicked:', clickedElement.className, 'ID:', clickedElement.id())
   
     
     // Determine element type and get config
@@ -422,8 +478,25 @@ export function useCanvas() {
     showWidgetAdder.value = false
   }
 
+  // Load scenes from localStorage on initialization
+  const loadScenesFromStorage = () => {
+    try {
+      const savedScenes = localStorage.getItem('scenes')
+      if (savedScenes) {
+        const parsedScenes = JSON.parse(savedScenes)
+        // Validate the data structure before using it
+        if (Array.isArray(parsedScenes)) {
+          scenes.value = parsedScenes
+        }
+      }
+    } catch (error) {
+      console.error('Failed to load scenes from localStorage:', error)
+    }
+  }
+
   
   // Only register lifecycle hooks if we're in a component context
+  //  Needed because we use useScene() in the router too
   const instance = getCurrentInstance()
   if (instance) {
     onMounted(() => {

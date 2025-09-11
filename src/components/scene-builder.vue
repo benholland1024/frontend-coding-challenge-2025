@@ -34,7 +34,9 @@
 
     <!-- Widget adder -->
     <div v-if="showWidgetAdder" class="absolute -right-55 top-0 bg-(--header-blue) border
-     border-gray-600 p-2 w-50 rounded-lg" @click.stop>
+     border-gray-600 p-2 w-50 rounded-lg" @click.stop
+     :style="{ height: `${windowHeight - 200}px`, overflowY: 'auto' }"
+    >
       <div class="text-white/50 text-sm">Hintergründe</div>
       <div class="cursor-pointer hover:[&>img]:scale-105 [&>img]:transition-transform flex 
         flex-col items-center"
@@ -77,6 +79,7 @@
 <script setup lang="ts">
 import { useCanvas } from '@/composables/useCanvas'
 import { Icon } from '@iconify/vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import circuitBg from '@/assets/circuit_bg.png'
 import rainbowBg from '@/assets/rainbow_bg.png'
 import bigScreen from '@/assets/big_screen.png'
@@ -92,6 +95,18 @@ const {
   selectElementById, 
   showWidgetAdder
 } = useCanvas()
+const windowHeight = ref(window.innerHeight)
 
+const handleResize = () => {
+  windowHeight.value = window.innerHeight
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 </script>
