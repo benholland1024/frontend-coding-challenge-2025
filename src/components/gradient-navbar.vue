@@ -42,6 +42,14 @@
       </div>
     </router-link>
 
+    <!-- The 'add a new scene' button -->
+    <div class="bg-[#726333] text-(--light-orange) border border-[#a56300] rounded-lg
+      w-8 h-8 flex items-center justify-center text-lg mt-2 ml-4 cursor-pointer hover:bg-[#827343]"
+      @click="createNewScene"
+    >
+      +
+    </div>
+
     <!-- The save button  -->
     <div class="flex-1"></div>
     <button class="w-30 h-8 m-2 bg-[#55F37F] text-white flex items-center rounded
@@ -61,7 +69,9 @@ import { useRoute } from "vue-router";
 import { useCanvas } from '@/composables/useCanvas'
 const savingState = ref<'saving' | 'just-saved' | 'idle'>('idle')
 
-const route = useRoute();
+const { 
+  scenes, createScene
+} = useCanvas()
 
 function save() {
   savingState.value = 'saving'
@@ -73,7 +83,7 @@ function save() {
   }, 1000)
 }
 
-const { 
-  scenes
-} = useCanvas()
+const createNewScene = () => {
+  createScene()
+}
 </script>

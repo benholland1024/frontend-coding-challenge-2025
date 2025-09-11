@@ -28,13 +28,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import TopNavbar from '@/components/top-navbar.vue'
 import { Icon } from '@iconify/vue'
 import { useCanvas } from '@/composables/useCanvas'
 
-const { scenes, createScene } = useCanvas();
+const { scenes, createScene, showWidgetAdder } = useCanvas();
 
 const router = useRouter()
 
@@ -43,13 +42,10 @@ const openScene = (sceneId: string) => {
 }
 
 const createNewScene = () => {
-  const newScene = createScene()
-  const newSceneId = `szene-${Date.now()}`
-
-  router.push(`/scene/${newSceneId}`)
+  createScene()
 }
 
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString()
-}
+onMounted(function() {
+  showWidgetAdder.value = false
+})
 </script>

@@ -1,8 +1,8 @@
 
 import Konva from 'konva'
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { onMounted, onUnmounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import circuitBg from '@/assets/circuit_bg.png'
 import bigScreen from '@/assets/big_screen.png'
@@ -124,6 +124,7 @@ initializeDefaultScene()
 
 export function useCanvas() {
   const route = useRoute()
+  const router = useRouter()
 
   const currentScene = computed(() => {
     const sceneId = route.params.sceneId as string
@@ -149,8 +150,26 @@ export function useCanvas() {
       backgrounds: []
     }
     scenes.value.push(newScene)
+    router.push(`/scene/${newScene.id}`)
+
     return newScene
   }
+
+  watch(
+    [() => route.path, () => route.params],
+    () => {
+      showWidgetAdder.value = false
+    selectedElement.value = null
+    if (transformer.value) {
+      transformer.value.getNode().nodes([])
+    }
+    
+    selectedElementType.value = null
+    selectedElementConfig.value = {}
+    toolbarPosition.value = null
+    },
+    { immediate: true, deep: true }
+  )
 
   //  Add a box to the canvas
   const addBox = () => {
